@@ -3,5 +3,20 @@
 	"LogPath": "",
 	"TCPAddr": "127.0.0.1:3563",
 	"WSAddr": "127.0.0.1:3653",
-	"MaxConnNum": 20000
+	"MaxConnNum": 20000,
+	"Mysql":{
+		"Host": "120.26.51.2",
+		"User": "root" ,
+		"Password": "p18e1e24",
+		"Database": "weixin",
+		"Port": "3306"	 ,
+		"Prefix":"wp_",
+		"Debug": true
+	},
+	"Redis":{
+		"Host": "47.97.36.2",
+		"Port": "6379"	 ,
+		"Auth":	"8A9XRSOw3f",
+		"Database": "2"
+	}
 }

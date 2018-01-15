@@ -49,8 +49,9 @@ type GameResponce struct {
 	Players interface{}
 }
 
-//chupai
+//出牌
 type GamePlay struct{
+	Roomid int  //房间号
 	Uid    int
-	Poke   []int
+	Poke   interface{}
 }

@@ -18,9 +18,14 @@ var leftNum int = 54
 
 func init() {
 	// 向当前模块（game 模块）注册 Hello 消息的消息处理函数 handleHello
+	//发牌和摸牌
 	handler(&msg.GameRequest{}, handleGameRequest)
-
+	//进入房间和创建房间
 	handler(&msg.EnterRoom{}, handleEnterGame)
+	//出牌
+	handler(&msg.GamePlay{}, handlePlayGame)
+
+
 
 	players:=make([]GDYPlayer,0)
 
@@ -31,8 +36,10 @@ func init() {
 
 	rooms["1"] = room
 
-
 	cards=cards.GetAllCard()
+
+
+
 
 	fmt.Println(cards)
 }
@@ -108,9 +115,6 @@ func handleEnterGame(args []interface{}){
 func handleGameRequest(args []interface{}) {
 	// 收到的 Hello 消息
 	m := args[0].(*msg.GameRequest)
-	// 消息的发送者
-	a := args[1].(gate.Agent)
-
 
 	//获取房间信息
 	k:=fmt.Sprint(m.Roomid)
@@ -119,22 +123,22 @@ func handleGameRequest(args []interface{}) {
 
 	players:=room.PlayerList
 
-
-
 	// 输出收到的消息的内容
-	log.Debug("hello %v", m.Roomid)
+	log.Debug("发牌和摸牌 %v", m.Roomid)
 
 	if m.Type == 1 {
 		players=getInitPoker(players,5)
 
-		// 给发送者回应一个消息
-		a.WriteMsg(&msg.GameResponce{
-			Players:players,
-		})
+		// 发牌给每个用户  每个用户收到的消息只为自己的
+		for _,player := range players{
+			player.agent.WriteMsg(&msg.GameResponce{
+				Players:player,
+			})
+		}
+
 	}
 
 }
-
 
 
 func getInitPoker(players []GDYPlayer,num int) (b []GDYPlayer){
@@ -142,7 +146,6 @@ func getInitPoker(players []GDYPlayer,num int) (b []GDYPlayer){
 	b = players
 
 	rand.Seed(time.Now().UnixNano())
-
 
 	for i:=0;i<(num+1);i++{
 		for j:=0;j<len(players);j++{
@@ -158,3 +161,36 @@ func getInitPoker(players []GDYPlayer,num int) (b []GDYPlayer){
 
 	return b
 }
+
+
+
+func handlePlayGame(args []interface{}){
+	// 收到的 Hello 消息
+	m := args[0].(*msg.GamePlay)
+
+	//获取房间信息
+	k:=fmt.Sprint(m.Roomid)
+
+	room:=rooms[k]
+
+	players:=room.PlayerList
+
+	// 输出收到的消息的内容
+	log.Debug("出牌 %v", m.Roomid)
+
+
+	for _,player := range players{
+		if player.Uid != m.Uid{
+
+			//mycards:=m.Poke.([]Card)
+			//cardtype:=getCardType(mycards)
+
+			//checkCards(cardtype,player.Card)
+
+			player.agent.WriteMsg(m)
+		}
+
+	}
+}
+
+
