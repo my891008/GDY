@@ -5,18 +5,18 @@
 	"WSAddr": "127.0.0.1:3653",
 	"MaxConnNum": 20000,
 	"Mysql":{
-		"Host": "120.26.51.2",
+		"Host": "",
 		"User": "root" ,
-		"Password": "p18e1e24",
-		"Database": "weixin",
+		"Password": "",
+		"Database": "",
 		"Port": "3306"	 ,
-		"Prefix":"wp_",
+		"Prefix":"",
 		"Debug": true
 	},
 	"Redis":{
-		"Host": "47.97.36.2",
+		"Host": "",
 		"Port": "6379"	 ,
-		"Auth":	"8A9XRSOw3f",
+		"Auth":	"",
 		"Database": "2"
 	}
 }
